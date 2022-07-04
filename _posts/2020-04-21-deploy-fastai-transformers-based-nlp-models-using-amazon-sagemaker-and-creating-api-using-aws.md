@@ -15,14 +15,16 @@ tags:
 
 
 ## Table of Contents
-- [Table of Contents](#table-of-contents)
 - [1. Introduction](#1-introduction)
 - [2. Part 1 — Exporting model and reloading it](#2-part-1--exporting-model-and-reloading-it)
+  - [2.1. Exporting the model](#21-exporting-the-model)
   - [2.2. Loading the model :](#22-loading-the-model-)
 - [3. Part 2 — Deployment using Amazon SageMaker](#3-part-2--deployment-using-amazon-sagemaker)
-- [4. Part 3 — Creating Model API using Amazon Lambda and Amazon API Gateway](#4-part-3--creating-model-api-using-amazon-lambda-and-amazon-api-gateway)
-- [Conclusion](#conclusion)
-- [References](#references)
+  - [3.1. Using SageMaker Python SDK to deploy the model](#31-using-sagemaker-python-sdk-to-deploy-the-model)
+    - [3.1.1. Prepare the environment](#311-prepare-the-environment)
+  - [4. Part 3 — Creating Model API using Amazon Lambda and Amazon API Gateway](#4-part-3--creating-model-api-using-amazon-lambda-and-amazon-api-gateway)
+  - [Conclusion](#conclusion)
+  - [References](#references)
 
  {% comment %} 1. Introduction
 
@@ -36,7 +38,7 @@ tags:
 
  6. References {% endcomment %}
 
-## 1. Introduction
+# 1. Introduction
 
 The [transformers](https://github.com/huggingface/transformers) library is created by [Hugging Face](https://huggingface.co). Formerly known as pytorch-transformers or pytorch-pretrained-bert, this library brings together over 40 state-of-the-art pre-trained NLP models (BERT, GPT-2, RoBERTa, CTRL…). It’s an opinionated library built for NLP researchers seeking to use/study/extend large-scale transformers models.
 
@@ -44,15 +46,15 @@ The implementation gives interesting additional utilities like tokenizer, optimi
 
 I suppose that you already implemented your model, and I am not going to cover this part, the article will tackle only the deployment part using AWS services, but if you need to see an implementation check this [Kernel](https://www.kaggle.com/melissarajaram/roberta-fastai-huggingface-transformers) on Kaggle.
 
-## 2. Part 1 — Exporting model and reloading it
+# 2. Part 1 — Exporting model and reloading it
 
-**2.1.** **Exporting the model**
+## 2.1. Exporting the model
 
 First, we need to export our model as a PKL file using the learner module of the fastai library :
 
  <iframe src="https://medium.com/media/0aa1dcd4796c21a60071d3172b8f2248" frameborder=0></iframe>
 
-### 2.2. Loading the model :
+## 2.2. Loading the model :
 
 When using a custom transformers model such as Bert, you need to redefine the architecture of the custom model, so that when loading it the load_learner() function will look for that specific function to use on new predictions.
 
@@ -64,7 +66,7 @@ Then we can load our model and make predictions :
 
  <iframe src="https://medium.com/media/855b8ded4eb134deff2d11c67c0402f3" frameborder=0></iframe>
 
-## 3. Part 2 — Deployment using Amazon SageMaker
+# 3. Part 2 — Deployment using Amazon SageMaker
 
 In Amazon’s own words:
 >  [*Amazon SageMaker](https://aws.amazon.com/sagemaker/) provides every developer and data scientist with the ability to build, train, and deploy machine learning models quickly. Amazon SageMaker is a fully-managed service that covers the entire machine learning workflow to label and prepare your data, choose an algorithm, train the model, tune and optimize it for deployment, make predictions, and take action. Your models get to production faster with much less effort and lower cost.*
@@ -75,13 +77,13 @@ SageMaker provides a framework to both training and deploying your models. Every
 
 since we will use Amazon SageMaker Python SDK, we need a notebook instance to run our code.
 
-**3.1.** **Using SageMaker Python SDK to deploy the model**
+## 3.1. Using SageMaker Python SDK to deploy the model
 
 from the SageMaker Python SDK documentation :
 >  Amazon SageMaker Python SDK is an open source library for training and deploying machine-learned models on Amazon SageMaker.
 >  With the SDK, you can train and deploy models using popular deep learning frameworks, algorithms provided by Amazon, or your own algorithms built into SageMaker-compatible Docker images.
 
-**3.1.1.** **Prepare the environment :**
+### 3.1.1. Prepare the environment
 
 The general architecture of the deployment is as follows :
 
@@ -111,7 +113,100 @@ The methods **input_fn** and **output_fn** are optional and if omitted SageMaker
 
 This is the serve.py script :
 
- <iframe src="https://medium.com/media/687bc29f8032845f2e61bf75ae6aed80" frameborder=0></iframe>
+{% highlight scss %}
+.highlight {
+  margin: 0;
+  padding: 1em;
+  font-family: $monospace;
+  font-size: $type-size-7;
+  line-height: 1.8;
+}
+{% endhighlight %}
+
+```python
+
+import logging, requests, os, io, glob, time
+import json
+
+
+from transformers import BertTokenizer
+from transformers import PreTrainedModel
+import torch
+
+from fastai.text import *
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+JSON_CONTENT_TYPE = 'application/json'
+
+#redefining transformers custom model
+class CustomTransformerModel(nn.Module):
+    def __init__(self, transformer_model: PreTrainedModel):
+        super(CustomTransformerModel,self).__init__()
+        self.transformer = transformer_model
+            
+    def forward(self, input_ids):
+        # Return only the logits from the transfomer
+        logits = self.transformer(input_ids)[0]   
+        return logits
+
+class FastAiBertTokenizer(BaseTokenizer):
+    """Wrapper around BertTokenizer to be compatible with fast.ai"""
+    def __init__(self, tokenizer: BertTokenizer, max_seq_len: int=128, **kwargs):
+        self._pretrained_tokenizer = tokenizer
+        self.max_seq_len = max_seq_len
+
+    def __call__(self, *args, **kwargs):
+        return self
+
+    def tokenizer(self, t:str) -> List[str]:
+        """Limits the maximum sequence length"""
+        return ["[CLS]"] + self._pretrained_tokenizer.tokenize(t)[:self.max_seq_len - 2] + ["[SEP]"]
+    
+
+# loads the model into memory from disk and returns it
+def model_fn(model_dir):
+    logger.info('model_fn')
+    path = Path(model_dir)
+    learn = load_learner(model_dir, 'fastai_transformers_model.pkl')
+    return learn
+
+
+# Perform prediction on the deserialized object, with the loaded model
+def predict_fn(input, model):
+    logger.info("Calling model")
+    start_time = time.time()
+    pred_class,pred_idx,pred_values = model.predict(input)
+    print("--- Inference time: %s seconds ---" % (time.time() - start_time))
+#     print(f'Predicted class is {str(pred_class)}')
+    #print(f'Predict confidence score is {predict_values[predict_idx.item()].item()}')
+    return json.dumps({
+        "input": input,
+        "pred_class": str(pred_class),
+        "pred_idx":sorted(
+            zip(model.data.classes, map(float, pred_idx)),
+            key=lambda p: p[1],
+            reverse=True
+        ),
+        "predictions": sorted(
+            zip(model.data.classes, map(float, pred_values)),
+            key=lambda p: p[1],
+            reverse=True
+        )
+    })
+# Deserialize the Invoke request body into an object we can perform prediction on
+def input_fn(request_body, content_type=JSON_CONTENT_TYPE):
+    logger.info('Deserializing the input data.')
+    # process an jsonlines uploaded to the endpoint
+    if content_type == JSON_CONTENT_TYPE: return request_body["text"]   
+    raise Exception('Requested unsupported ContentType in content_type: {}'.format(content_type))
+    
+# Serialize the prediction result into the desired response content type
+def output_fn(prediction, accept=JSON_CONTENT_TYPE):        
+    logger.info('Serializing the generated output.')
+    if accept == JSON_CONTENT_TYPE: return json.dumps(prediction), accept
+    raise Exception('Requested unsupported ContentType in Accept: {}'.format(accept))    
+```
 
 one other thing is to put this script inside a folder and call it my_src, and we will add a requirements text file; to force SageMaker to install the required library such as Fastai.
 

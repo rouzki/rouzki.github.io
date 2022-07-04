@@ -1,5 +1,5 @@
 ---
-title: "Deploy Fastai — Transformers based NLP models using Amazon SageMaker and Creating API using AWS API Gateway and Lambda function Fastai-Transformers model deployment on AWS SageMaker and serving it as an AWS API."
+title: "Active Learning Overview: Strategies and Uncertainty Measures"
 excerpt: "Intuition and overview of Active Learning terminology and hands on Uncertainty Sampling calculation."
 header:
   teaser: "http://farm9.staticflickr.com/8426/7758832526_cc8f681e48_c.jpg"
@@ -13,7 +13,21 @@ tags:
 
 **Active Learning Overview: Strategies and Uncertainty Measures**
 
-# 1\. Active Learning
+
+- [**1\. Active Learning**](#1-active-learning)
+- [**2\. Active learning strategy**](#2-active-learning-strategy)
+  - [2.1 Active Learning Approach #1 : Streaming](#21-active-learning-approach-1--streaming)
+  - [2.2. Active Learning Approach #2: Pooling](#22-active-learning-approach-2-pooling)
+  - [2.3 Active Learning Approach #3: Query by Committee](#23-active-learning-approach-3-query-by-committee)
+- [**3\. Uncertainty Measures**](#3-uncertainty-measures)
+  - [3.1. Least confidence:](#31-least-confidence)
+  - [3.2. Margin of confidence sampling](#32-margin-of-confidence-sampling)
+  - [3.3. Ratio sampling](#33-ratio-sampling)
+  - [3.4. Entropy Sampling](#34-entropy-sampling)
+- [**4. Closing up**](#4-closing-up)
+- [References](#references)
+
+# **1\. Active Learning**
 
 
 · Active learning is the name used for the process of prioritizing the data which needs to be labelled in order to have the highest impact to training a supervised model.
@@ -49,7 +63,9 @@ The steps to use active learning on an unlabeled data set are:
 4.  A score is chosen on each unlabeled data point based on the prediction of the model. In the next subsection, we will present some of the possible scores most commonly used.
 5.  Once the best approach has been chosen to prioritize the labelling, this process can be iteratively repeated: a new model can be trained on a new labelled data set, which has been labelled based on the priority score. Once the new model has been trained on the subset of data, the unlabelled data points can be run through the model to update the prioritization scores to continue labelling. In this way, one can keep optimizing the labelling strategy as the models become better and better.
 
-![](https://miro.medium.com/max/1400/1*4Luh777UdzAOJIHg4qa2bQ.png)General Strategy of AL / Image by Author
+![](https://miro.medium.com/max/1400/1*4Luh777UdzAOJIHg4qa2bQ.png)
+{:.image-caption}
+*General Strategy of AL / Image by Author*
 
 ## 2.1 Active Learning Approach #1 : Streaming
 
@@ -87,7 +103,7 @@ This output is most likely from softmax, which converts the logits to a 0–1 ra
 
 ![](https://miro.medium.com/max/1400/1*mWoTdQMUuYbaUcejnc8vkg.png)Image by Author
 
-## **3.1. Least confidence:**
+## 3.1. Least confidence:
 
 Least confidence takes the difference between 1 (100% confidence) and the most confidently predicted label for each item.
 
@@ -100,7 +116,7 @@ Let’s apply this to our example, the uncertainty score would be :
 
 Least confidence is the simplest and most used method, it gives you ranked order of predictions where you will sample items with the lowest confidence for their predicted label.
 
-## **3.2. Margin of confidence sampling**
+## 3.2. Margin of confidence sampling
 
 The most intuitive form of uncertainty sampling is the difference between the two most confident predictions. That is, for the label that the model predicted, how much more confident was it than for the next-most-confident label? This is defined as :
 
@@ -110,7 +126,7 @@ Again, we can convert this to a 0–1 range. We have to subtract from 1.0 again,
 
 Let’s apply margin of confidence sampling to our example data. “Cat” and “Horse” are the most-confident and second-most-confident prediction. Using our example, this uncertainty score would be 1.0 — (0.9352–0.0540) = 0.1188.
 
-## **3.3. Ratio sampling**
+## 3.3. Ratio sampling
 
 Ratio of confidence is a slight variation on margin of confidence, looking at the ratio between the top two scores instead of the difference.
 
@@ -118,7 +134,7 @@ Ratio of confidence is a slight variation on margin of confidence, looking at th
 
 Now let’s plug in our numbers again: 0.9352 / 0.0540 = 17.3185.
 
-## **3.4. Entropy Sampling**
+## 3.4. Entropy Sampling
 
 Entropy applied to a probability distribution involves multiplying each probability by its own log and taking the negative sum:
 
@@ -132,7 +148,7 @@ Summing the numbers and negating them returns 0 — SUM(–0.0705, –0.0903, �
 
 Dividing by the log of the number of labels returns 0.3881/ log2(3) = 0.6151
 
-# **Closing up**
+# **4. Closing up**
 
 
 Most of the focus of the machine learning community is in creating better algorithms for learning from data. But getting useful annotated datasets is difficult. Really difficult. It can be expensive, time-consuming, and you still end up with problems like annotations missing from some categories. Active Learning is a great building block for this, and is under utilized in my opinion.
