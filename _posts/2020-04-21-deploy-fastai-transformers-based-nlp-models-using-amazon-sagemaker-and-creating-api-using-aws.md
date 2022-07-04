@@ -1,12 +1,17 @@
 ---
-title: "Deploy Fastai — Transformers based NLP models using Amazon SageMaker and Creating API using AWS API Gateway and Lambda function."
+title: "Deploy fastai — Transformers based NLP models using Amazon SageMaker and Creating API using AWS API Gateway and Lambda function."
 excerpt: "Fastai-Transformers model deployment on AWS SageMaker and serving it as an AWS API."
 header:
-  teaser: "http://farm9.staticflickr.com/8426/7758832526_cc8f681e48_c.jpg"
+  teaser: "https://miro.medium.com/max/1400/1*CU99y9su6oESfY78QulUkA.png"
 tags: 
-  - sample post
-  - images
-  - test
+  - deployement
+  - nlp
+  - Transformers
+  - AWS
+  - API
+  - fastai
+  - lambda
+classes: wide
 ---
 
 
@@ -22,9 +27,14 @@ tags:
 - [3. Part 2 — Deployment using Amazon SageMaker](#3-part-2--deployment-using-amazon-sagemaker)
   - [3.1. Using SageMaker Python SDK to deploy the model](#31-using-sagemaker-python-sdk-to-deploy-the-model)
     - [3.1.1. Prepare the environment](#311-prepare-the-environment)
-  - [4. Part 3 — Creating Model API using Amazon Lambda and Amazon API Gateway](#4-part-3--creating-model-api-using-amazon-lambda-and-amazon-api-gateway)
-  - [Conclusion](#conclusion)
-  - [References](#references)
+    - [3.1.2. Deploy the model :](#312-deploy-the-model-)
+    - [3.2.3. Calling Endpoint using Boto3 :](#323-calling-endpoint-using-boto3-)
+- [4. Part 3 — Creating Model API using Amazon Lambda and Amazon API Gateway](#4-part-3--creating-model-api-using-amazon-lambda-and-amazon-api-gateway)
+  - [4.1. Create Amazon Lambda Function](#41-create-amazon-lambda-function)
+  - [4.2. Creating Amazon Web API Gateway instance :](#42-creating-amazon-web-api-gateway-instance-)
+  - [4.3. Testing your Amazon API](#43-testing-your-amazon-api)
+- [Conclusion](#conclusion)
+- [References](#references)
 
  {% comment %} 1. Introduction
 
@@ -51,8 +61,10 @@ I suppose that you already implemented your model, and I am not going to cover t
 ## 2.1. Exporting the model
 
 First, we need to export our model as a PKL file using the learner module of the fastai library :
-
- <iframe src="https://medium.com/media/0aa1dcd4796c21a60071d3172b8f2248" frameborder=0></iframe>
+```python
+learner.export('models/fastai_transformers_model.pkl')
+```
+<!-- <script src="https://gist.github.com/rouzki/d4a83ecc73802bfc6bb71e931c28b0ab.js"></script> -->
 
 ## 2.2. Loading the model :
 
@@ -60,16 +72,45 @@ When using a custom transformers model such as Bert, you need to redefine the ar
 
 Before loading the model, we need to redefine the custom transformer model that we used on training.
 
- <iframe src="https://medium.com/media/c6ec3a3ee03e03a39f3020b9c9d05216" frameborder=0></iframe>
+```python
+from transformers import BertTokenizer
+from transformers import PreTrainedModel
+
+from fastai.text import *
+class FastAiBertTokenizer(BaseTokenizer):
+    """Wrapper around BertTokenizer to be compatible with fast.ai"""
+    def __init__(self, tokenizer: BertTokenizer, max_seq_len: int=128, **kwargs):
+        self._pretrained_tokenizer = tokenizer
+        self.max_seq_len = max_seq_len
+
+    def __call__(self, *args, **kwargs):
+        return self
+
+    def tokenizer(self, t:str) -> List[str]:
+        """Limits the maximum sequence length"""
+        return ["[CLS]"] + self._pretrained_tokenizer.tokenize(t)[:self.max_seq_len - 2] + ["[SEP]"]
+class CustomTransformerModel(nn.Module):
+    def __init__(self, transformer_model: PreTrainedModel):
+        super(CustomTransformerModel,self).__init__()
+        self.transformer = transformer_model
+        
+    def forward(self, input_ids):
+        # Return only the logits from the transfomer
+        logits = self.transformer(input_ids)[0]   
+        return logits
+```
 
 Then we can load our model and make predictions :
 
- <iframe src="https://medium.com/media/855b8ded4eb134deff2d11c67c0402f3" frameborder=0></iframe>
+```python	
+learner = load_learner(Path(ROOT_PATH),'fastai_transformers_model.pkl')
+outputs = learner.predict("a text to predict or whatever")
+```
 
 # 3. Part 2 — Deployment using Amazon SageMaker
 
 In Amazon’s own words:
->  [*Amazon SageMaker](https://aws.amazon.com/sagemaker/) provides every developer and data scientist with the ability to build, train, and deploy machine learning models quickly. Amazon SageMaker is a fully-managed service that covers the entire machine learning workflow to label and prepare your data, choose an algorithm, train the model, tune and optimize it for deployment, make predictions, and take action. Your models get to production faster with much less effort and lower cost.*
+>  [Amazon SageMaker](https://aws.amazon.com/sagemaker/) provides every developer and data scientist with the ability to build, train, and deploy machine learning models quickly. Amazon SageMaker is a fully-managed service that covers the entire machine learning workflow to label and prepare your data, choose an algorithm, train the model, tune and optimize it for deployment, make predictions, and take action. Your models get to production faster with much less effort and lower cost.
 
 SageMaker provides a framework to both training and deploying your models. Everything is run in Docker containers.
 
@@ -91,11 +132,25 @@ The general architecture of the deployment is as follows :
 
 after uploading your model ( PKL file ) to the notebook instance, we need to zip it up so that we can upload it to S3.
 
- <iframe src="https://medium.com/media/b2e95ca1bf145659b0931c070533db28" frameborder=0></iframe>
+```python
+import tarfile
+with tarfile.open('model.tar.gz', 'w:gz') as f:
+    t = tarfile.TarInfo('models')
+    t.type = tarfile.DIRTYPE
+    f.addfile(t)
+    f.add('fastai_transformers_model.pkl', arcname='fastai_transformers_model.pkl')
+```
 
 Then we can upload it to S3 storage as follows :
 
- <iframe src="https://medium.com/media/f9d842df3c43a36dcd9b247bfafb93be" frameborder=0></iframe>
+```python
+import sagemaker
+from sagemaker.utils import name_from_base
+sagemaker_session = sagemaker.Session()
+bucket = sagemaker_session.default_bucket()
+prefix = f'sagemaker/{name_from_base("fastai-transformers-model")}'
+model_artefact = sagemaker_session.upload_data(path='models/model.tar.gz', bucket=bucket, key_prefix=prefix)
+```
 
 Now we are ready to deploy our model to the SageMaker model hosting service. We will use the SageMaker Python SDK with the Amazon SageMaker open-source PyTorch container as this container has support for the fast.ai library. Using one of the predefined Amazon SageMaker containers makes it easy to write a script and then run it in Amazon SageMaker.
 
@@ -112,16 +167,6 @@ To serve models in SageMaker, we need a script that implements 4 methods: **mode
 The methods **input_fn** and **output_fn** are optional and if omitted SageMaker will assume the input and output objects are of type NPY format with Content-Type application/x-npy.
 
 This is the serve.py script :
-
-{% highlight scss %}
-.highlight {
-  margin: 0;
-  padding: 1em;
-  font-family: $monospace;
-  font-size: $type-size-7;
-  line-height: 1.8;
-}
-{% endhighlight %}
 
 ```python
 
@@ -211,34 +256,60 @@ def output_fn(prediction, accept=JSON_CONTENT_TYPE):
 one other thing is to put this script inside a folder and call it my_src, and we will add a requirements text file; to force SageMaker to install the required library such as Fastai.
 
 my requirements.txt file contains only this :
->  fastai==1.0.52
-transformers
+>  fastai==1.0.52 <br/>
+   transformers
 
 you can read much about this on the SageMaker Python SDK documentation [here](https://sagemaker.readthedocs.io/en/stable/using_pytorch.html#using-third-party-libraries).
 
-**3.1.2.** **Deploy the model :**
+### 3.1.2. Deploy the model :
 
 First, we need to create a RealTimePredictor class to accept JSON/application item as input and output JSON. The default behavior is to accept a NumPy array.
+```python
+from sagemaker.predictor import RealTimePredictor, json_deserializer
 
- <iframe src="https://medium.com/media/2ee99d516078670d7ec4af39f1a79389" frameborder=0></iframe>
+class Predictor(RealTimePredictor):
+    def __init__(self, endpoint_name, sagemaker_session):
+        super().__init__(endpoint_name, sagemaker_session=sagemaker_session, serializer=None, 
+                         deserializer=json_deserializer,content_type='application/json')
+```
 
 We need to get the IAM role ARN to give SageMaker permissions to read our model artefact from S3.
-
- <iframe src="https://medium.com/media/129d9d98e45862c56c4c8d322b8f6ba2" frameborder=0></iframe>
+```python
+import sagemaker
+role = sagemaker.get_execution_role()
+```
 
 we will deploy our model to the instance type ml.p2.xlarge . We will pass in the name of our serving script e.g. serve.py. We will also pass in the S3 path of our model that we uploaded earlier.
+```python
+from sagemaker.pytorch import PyTorch, PyTorchModel
 
- <iframe src="https://medium.com/media/8aff3fc534d8dc6c5abebcfd27118103" frameborder=0></iframe>
+model=PyTorchModel(model_data=model_artefact, name=name_from_base("fastai-transformers-model"),
+    role=role, framework_version='1.4.0', entry_point='serve.py', predictor_cls=Predictor,source_dir='my_src')
+
+predictor = model.deploy(initial_instance_count=1, instance_type='ml.p2.xlarge')
+```
 
 It will take a while for SageMaker to provision the endpoint ready for inference.
 
-**3.2.3.** **Calling Endpoint using Boto3 :**
+### 3.2.3. Calling Endpoint using Boto3 :
 
 Boto is the Amazon Web Services (AWS) SDK for Python. It enables Python developers to create, configure, and manage AWS services, such as EC2 and S3. Boto provides an easy-to-use, object-oriented API, as well as low-level access to AWS services.
 
- <iframe src="https://medium.com/media/fd7fd96bbf8b754e16c9697792dad19c" frameborder=0></iframe>
+```python
+import boto3
+import json
+client = boto3.client('sagemaker-runtime')
 
-## 4. Part 3 — Creating Model API using Amazon Lambda and Amazon API Gateway
+response = client.invoke_endpoint(
+    EndpointName='your_endpoint_name',
+    Body="testing the model",
+    ContentType='application/json',
+    Accept="application/json"
+)
+result = response['Body'].read().decode()
+```
+
+# 4. Part 3 — Creating Model API using Amazon Lambda and Amazon API Gateway
 
 We will invoke our model endpoint deployed by Amazon SageMaker using API Gateway and AWS Lambda.
 
@@ -246,7 +317,7 @@ The following diagram shows how the deployed model is called using a serverless 
 
 ![Architecture of deployment](https://cdn-images-1.medium.com/max/2000/1*A96E9mJJTch-R2RH5Pf2iA.jpeg)
 
-**4.1.** **Create Amazon Lambda Function**
+## 4.1. Create Amazon Lambda Function
 
 **AWS Lambda** is an event-driven, serverless computing platform provided by Amazon as a part of Amazon Web Services. It is a computing service that runs code in response to events and automatically manages the computing resources required by that code.
 
@@ -256,9 +327,32 @@ To create a function we specify its name and the Runtime Environment (Python 3 i
 
 Then we use our custom function to call endpoint using Boto3 library as follows :
 
- <iframe src="https://medium.com/media/60956ad0b92e8a36cd31b9caf8d03bc5" frameborder=0></iframe>
+```python
+import os
+import io
+import boto3
+import json
+import csv
 
-**4.2.** **Creating Amazon Web API Gateway instance :**
+# grab environment variables
+ENDPOINT_NAME = "fastai-transformers-model"
+runtime= boto3.client('runtime.sagemaker')
+
+def lambda_handler(event, context):
+    print("Received event: " + json.dumps(event, indent=2))
+    
+    data = json.loads(json.dumps(event))
+    payload = data['body']    
+    response = runtime.invoke_endpoint(EndpointName=ENDPOINT_NAME,
+                                        ContentType='application/json',
+                                       Body=payload)
+    result = json.loads(response['Body'].read().decode())
+    #print(result)
+    
+    return result
+```
+
+## 4.2. Creating Amazon Web API Gateway instance :
 
 Amazon API Gateway is a fully managed service that makes it easy for developers to create, publish, maintain, monitor, and secure APIs at any scale.
 
@@ -270,7 +364,7 @@ then we need to identify the routes of our API, we will use just one route “/c
 
 ![](https://cdn-images-1.medium.com/max/2180/1*yIXbxeVprbft9XYN8iZ7tw.jpeg)
 
-**4.3.** **Testing your Amazon API**
+## 4.3. Testing your Amazon API
 
 Now that we have the Lambda function, an API Gateway, and the test data, let’s test it using Postman, which is an HTTP client for testing web services.
 
@@ -286,16 +380,27 @@ Then we send our requests and it will return JSON item as a response containing 
 
 We can also use the requests library in python as follows :
 
- <iframe src="https://medium.com/media/46aa1ce222643d6e5e9774e8c6e97fd7" frameborder=0></iframe>
+```python
+import requests
+import json
 
-## Conclusion
+url = "https://api_id_here.execute-api.us-east-2.amazonaws.com/test/classify"
+
+payload = "\"your text here! \""
+headers = {
+  'Content-Type': 'application/json',
+}
+
+response = requests.request("POST", url, headers=headers, data = payload)
+
+print(json.loads(response.text.encode('utf8')))
+```
+
+# Conclusion
 
 That is it. You have created a model endpoint deployed and hosted by Amazon SageMaker. Then you created serverless components (an API Gateway and a Lambda function) that invoke the endpoint. Now you know how to call a machine learning model endpoint hosted by Amazon SageMaker using serverless technology.
 
-## References
-[**Amazon SageMaker**
-*This is a quick guide to starting v4 of the fast.ai course Practical Deep Learning for Coders using Amazon SageMaker…*course.fast.ai](https://course.fast.ai/start_sagemaker.html)
-[**Call an Amazon SageMaker model endpoint using Amazon API Gateway and AWS Lambda | Amazon Web…**
-*At AWS Machine Learning workshops, customers often ask, "After I deploy an endpoint, where do I go from there?" You can…*aws.amazon.com](https://aws.amazon.com/blogs/machine-learning/call-an-amazon-sagemaker-model-endpoint-using-amazon-api-gateway-and-aws-lambda/)
-[**Step 6.1: Deploy the Model to SageMaker Hosting Services**
-*To deploy a model in SageMaker, hosting services, you can use either the Amazon SageMaker Python SDK or the AWS SDK for…*docs.aws.amazon.com](https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-deploy-model.html)
+# References
+* [Amazon SageMaker & course.fast.ai](https://course.fast.ai/start_sagemaker.html)
+* [Call an Amazon SageMaker model endpoint using Amazon API Gateway and AWS Lambda \| Amazon Web…](https://aws.amazon.com/blogs/machine-learning/call-an-amazon-sagemaker-model-endpoint-using-amazon-api-gateway-and-aws-lambda/)
+* [Step 6.1: Deploy the Model to SageMaker Hosting Services](https://docs.aws.amazon.com/sagemaker/latest/dg/ex1-deploy-model.html)

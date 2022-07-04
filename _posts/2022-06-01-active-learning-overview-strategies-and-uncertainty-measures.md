@@ -7,6 +7,7 @@ tags:
   - sample post
   - images
   - test
+toc: true
 ---
 
 ![](https://miro.medium.com/max/1400/1*4Luh777UdzAOJIHg4qa2bQ.png)
