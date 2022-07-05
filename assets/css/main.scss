@@ -33,10 +33,27 @@ font-family: "o_mono";
 src: url("/assets/fonts/OperatorMono-Medium.otf");
 }
 
+// @font-face {
+//   font-family: "Neue_Kabel";
+//   src: url("/assets/fonts/NeueKabel-Regular.ttf");
+//   }
+
 @font-face {
-  font-family: "Neue_Kabel";
-  src: url("/assets/fonts/NeueKabel-Regular.ttf");
-  }
+    font-family: "Neue_Kabel";
+    src: url("/assets/fonts/NeueKabel-Regular.ttf");
+}
+@font-face {
+    font-family: "Neue_Kabel";
+    src: url("/assets/fonts/NeueKabel-Bold.ttf");
+    font-weight: bold;
+}
+@font-face {
+    font-family: "DejaVu Sans";
+    src: url("/assets/fonts/NeueKabel-BoldItalic.ttf");
+    font-weight: bold;
+    font-style: italic;
+}
+
 
 @import "minimal-mistakes"; // main partials
 
