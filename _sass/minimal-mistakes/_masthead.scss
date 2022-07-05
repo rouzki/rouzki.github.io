@@ -23,7 +23,9 @@
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
-    font-family: "Neue_Kabel";
+    font-family: "Neue_Kabel"; //edited
+    font-size: 0.8em; //added
+    font-weight: bold; //added
 
     @include breakpoint($x-large) {
       max-width: $max-width;

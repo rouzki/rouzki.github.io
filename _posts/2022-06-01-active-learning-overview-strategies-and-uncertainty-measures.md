@@ -2,11 +2,16 @@
 title: "Active Learning Overview: Strategies and Uncertainty Measures"
 excerpt: "Intuition and overview of Active Learning terminology and hands on Uncertainty Sampling calculation."
 header:
-  teaser: "http://farm9.staticflickr.com/8426/7758832526_cc8f681e48_c.jpg"
+  teaser: "https://miro.medium.com/max/1400/1*4Luh777UdzAOJIHg4qa2bQ.png"
 tags: 
-  - sample post
-  - images
-  - test
+  - Active Learning
+  - Machine Learning
+  - Human in the loop
+  - Uncertainty Sampling
+  - AI
+  - ML
+  - Labelling
+  - Data Annotation
 toc: true
 ---
 
@@ -156,10 +161,10 @@ Most of the focus of the machine learning community is in creating better algori
 
 # References
 
-\[1\] [https://www.manning.com/books/human-in-the-loop-machine-learning](https://www.manning.com/books/human-in-the-loop-machine-learning)
+* [1\] [https://www.manning.com/books/human-in-the-loop-machine-learning](https://www.manning.com/books/human-in-the-loop-machine-learning)
 
-\[2\] [https://towardsdatascience.com/introduction-to-active-learning-117e0740d7cc](https://medium.com/introduction-to-active-learning-117e0740d7cc)
+* [2\] [https://towardsdatascience.com/introduction-to-active-learning-117e0740d7cc](https://medium.com/introduction-to-active-learning-117e0740d7cc)
 
-\[3\] [https://www.cs.cmu.edu/~tom/10701\_sp11/recitations/Recitation\_13.pdf](https://www.cs.cmu.edu/~tom/10701_sp11/recitations/Recitation_13.pdf)
+* [3\] [https://www.cs.cmu.edu/~tom/10701\_sp11/recitations/Recitation\_13.pdf](https://www.cs.cmu.edu/~tom/10701_sp11/recitations/Recitation_13.pdf)
 
-\[4\] [https://www.youtube.com/watch?v=l6HFdqk480o&feature=youtu.be](https://www.youtube.com/watch?v=l6HFdqk480o&feature=youtu.be)
+* [4\] [https://www.youtube.com/watch?v=l6HFdqk480o&feature=youtu.be](https://www.youtube.com/watch?v=l6HFdqk480o&feature=youtu.be)

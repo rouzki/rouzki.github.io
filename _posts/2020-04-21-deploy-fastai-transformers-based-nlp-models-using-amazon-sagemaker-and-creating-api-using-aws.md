@@ -77,6 +77,7 @@ from transformers import BertTokenizer
 from transformers import PreTrainedModel
 
 from fastai.text import *
+
 class FastAiBertTokenizer(BaseTokenizer):
     """Wrapper around BertTokenizer to be compatible with fast.ai"""
     def __init__(self, tokenizer: BertTokenizer, max_seq_len: int=128, **kwargs):
@@ -89,6 +90,8 @@ class FastAiBertTokenizer(BaseTokenizer):
     def tokenizer(self, t:str) -> List[str]:
         """Limits the maximum sequence length"""
         return ["[CLS]"] + self._pretrained_tokenizer.tokenize(t)[:self.max_seq_len - 2] + ["[SEP]"]
+
+
 class CustomTransformerModel(nn.Module):
     def __init__(self, transformer_model: PreTrainedModel):
         super(CustomTransformerModel,self).__init__()
@@ -239,6 +242,7 @@ def predict_fn(input, model):
             reverse=True
         )
     })
+
 # Deserialize the Invoke request body into an object we can perform prediction on
 def input_fn(request_body, content_type=JSON_CONTENT_TYPE):
     logger.info('Deserializing the input data.')
