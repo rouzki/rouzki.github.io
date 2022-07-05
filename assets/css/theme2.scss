@@ -1,0 +1,54 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+@charset "utf-8";
+
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin2 | default: 'default' }}"; // skin
+$base00: #263238;
+$base01: #2e3c43;
+$base02: #314549;
+$base03: #546e7a;
+$base04: #b2ccd6;
+$base05: #eeffff;
+$base06: #eeffff;
+$base07: #ffffff;
+$base08: #f07178;
+$base09: #f78c6c;
+$base0a: #ffcb6b;
+$base0b: #c3e88d;
+$base0c: #89ddff;
+$base0d: #82aaff;
+$base0e: #c792ea;
+$base0f: #ff5370;
+
+@font-face {
+    font-family: "monolisaa";
+    src: url("/assets/fonts/MonoLisa-Regular.otf");
+  }
+@font-face {
+font-family: "o_mono";
+src: url("/assets/fonts/OperatorMono-Medium.otf");
+}
+
+// @font-face {
+//   font-family: "Neue_Kabel";
+//   src: url("/assets/fonts/NeueKabel-Regular.ttf");
+//   }
+
+@font-face {
+    font-family: "Neue_Kabel";
+    src: url("/assets/fonts/NeueKabel-Regular.ttf");
+}
+@font-face {
+    font-family: "Neue_Kabel";
+    src: url("/assets/fonts/NeueKabel-Bold.ttf");
+    font-weight: bold;
+}
+@font-face {
+    font-family: "Neue_Kabel";
+    src: url("/assets/fonts/NeueKabel-BoldItalic.ttf");
+    font-weight: bold;
+    font-style: italic;
+}
+@import "minimal-mistakes"; // main partials
