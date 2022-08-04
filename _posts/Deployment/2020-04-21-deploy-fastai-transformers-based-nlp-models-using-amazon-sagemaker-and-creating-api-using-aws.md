@@ -3,6 +3,7 @@ title: "Deploy fastai — Transformers based NLP models using Amazon SageMaker a
 excerpt: "Fastai-Transformers model deployment on AWS SageMaker and serving it as an AWS API."
 header:
   teaser: "https://miro.medium.com/max/1400/1*CU99y9su6oESfY78QulUkA.png"
+categories: Deployment
 tags: 
   - deployement
   - nlp

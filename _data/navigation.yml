@@ -6,13 +6,13 @@ main:
     url: /portfolio/
   - title: "Blogs"
     url: /posts/
-  - title: "Resources"
-    url: /resources/
+  - title: "Projects"
+    url: /projects/
   - title: "About"
     url: /About
   
 
-  - title: "Projects"
-    url: /projects/
-  - title: "Sitemap"
-    url: /sitemap/
+  # - title: "Projects"
+  #   url: /projects/
+  # - title: "Sitemap"
+  #   url: /sitemap/

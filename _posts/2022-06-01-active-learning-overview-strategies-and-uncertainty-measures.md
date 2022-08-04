@@ -1,6 +1,7 @@
 ---
 title: "Active Learning Overview: Strategies and Uncertainty Measures"
 excerpt: "Intuition and overview of Active Learning terminology and hands on Uncertainty Sampling calculation."
+categories: Data Labelling
 header:
   teaser: "https://miro.medium.com/max/1400/1*4Luh777UdzAOJIHg4qa2bQ.png"
 tags: 

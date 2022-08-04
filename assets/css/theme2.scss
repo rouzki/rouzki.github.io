@@ -51,4 +51,26 @@ src: url("/assets/fonts/OperatorMono-Medium.otf");
     font-weight: bold;
     font-style: italic;
 }
+
+@font-face {
+    font-family: "charter";
+    src: url("/assets/fonts/Charter\ Regular.ttf");
+}
+@font-face {
+    font-family: "charter";
+    src: url("/assets/fonts/Charter\ Bold.ttf");
+    font-weight: bold;
+}
+@font-face {
+    font-family: "charter";
+    src: url("/assets/fonts/Charter\ italic.ttf");
+    font-style: italic;
+}
+@font-face {
+    font-family: "Neue_Kabel";
+    src: url("/assets/fonts/Charter\ Bold\ Italic.ttf");
+    font-weight: bold;
+    font-style: italic;
+}
+
 @import "minimal-mistakes"; // main partials
