@@ -1,7 +1,6 @@
 ---
-layout: posts
 title: Portfolio - Zakarya
-permalink: /portfolio
+permalink: /
 ---
 ## This is my portfolio
 
