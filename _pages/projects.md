@@ -26,7 +26,8 @@ Some of the project I worked on :
 You can now use the model on your own pipeline in only 3 lines of code 🤯.
 <!-- ![](/assets/images/Snap.png) -->
 ![full](/assets/images/Snap.png){: .full}
-Check out the:
+
+More details:
 [Model on Hugging Face 🤗](https://huggingface.co/ZakaryaRouzki/t5-punctuation){: .btn .btn--info}
 [Github Repository](https://github.com/rouzki/TextPunctuator){: .btn .btn--info}
 
@@ -43,4 +44,4 @@ The goal of the project is to produce a multi-label classifier capable of inferr
 
 ---
 
-more projects on my profile here : [Github Repository](https://github.com/rouzki){: .btn .btn--info}
+More projects on my Github profile here : [Github Repository](https://github.com/rouzki){: .btn .btn--info}

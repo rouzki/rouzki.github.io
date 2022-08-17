@@ -1,16 +1,21 @@
 ---
-title: "Resume - ROUZKI's Portfolio"
+title: "Resume"
 permalink: /resume
 author_profile: true
-# header:
-#   image: https://media-exp2.licdn.com/dms/image/C4D16AQHq910y2bbNgA/profile-displaybackgroundimage-shrink_350_1400/0/1590682525479?e=1662595200&v=beta&t=Bj72v75Qzz-IZXyE9YUkokJ6m99hldg2CwBwq8zP_fQ
+classes: wide
+header:
+  image: ../assets/images/resume_cover.jpg
 ---
 
 
-# Experience
 
-## FY COMPUTING, IREVOLUTION
 
+
+## 1. Experience
+### FYCOMPUTIG / IREVOLUTION <img src="../assets/images/irevolution-logo-dark.svg" alt="IRevolution logo"  align="right" width="200" height = "200"/> 
+
+<br/>
+<br/>
 · Data Scientist - Full-time<br/>
 · Aug 2020 - Present<br/>
 · Rabat, Rabat-Salé-Kenitra, Morocco<br/>
@@ -45,6 +50,9 @@ Data Scientist contributing to the development of Data Science/AI solutions :
 Skills: Machine Learning · Natural Language Processing (NLP) · Amazon EC2
 
 ---
+### FYCOMPUTIG / IREVOLUTION <img src="../assets/images/irevolution-logo-dark.svg" alt="IRevolution logo"  align="right" width="200" height = "200"/> 
+<br/>
+<br/>
 · Data Scientist - Internship<br/>
 · Feb 2020 - Aug 2020 · 7 months<br/>
 · Rabat, Rabat-Salé-Kenitra, Morocco<br/>
@@ -85,3 +93,39 @@ Star5 is a SaaS solution, that uses NLP techniques and Artificial Intelligence t
  * Other techniques : Data Augmentation, Data Labeling.
 
 Skills: Machine Learning · Natural Language Processing (NLP) · Amazon Web Services (AWS) · AWS SageMaker
+
+
+## 2. Education
+
+
+### Abdelmalek Essadi University <img src="../assets/images/logo_uae.png" alt="IRevolution logo"  align="right" width="200" height = "200"/>
+
+<br/>
+<br/>
+
+· Master's degree, DATA SCIENCE AND BIG DATA <br/>
+· 2018 - 2020 <br/>
+
+<br/>
+<br/>
+Data Science, Big Data Archeticture, Big Data Analytics, Data Mining, Machine Learning, NoSQL Databases, Statistics, Cloud Computing & Virtualization, IoT & Artificial Intelligence, Computer Vision, Databases Administration...
+
+Faculty of Science and Technology , Tangier, Morocco (www.fstt.ac.ma)
+
+
+---
+### Sultan Moulay Slimane University <img src="../assets/images/logo_usms.png" alt="IRevolution logo"  align="right" width="200" height = "200"/>
+
+<br/>
+<br/>
+
+· Bachelor's degree, Computer Science <br/>
+· 2017 - 2018 <br/>
+· Grade: Quite Good - B+ <br/>
+
+<br/>
+<br/>
+Java , C , JEE , Conception ( UML & Merise ) , .Net , Oracle , SQL SERVER , Information System, Networking ,Web Development , Project management ....
+
+Faculty of Science and Technology Béni Mellal
+B.P : 523 Béni - Mellal Maroc
