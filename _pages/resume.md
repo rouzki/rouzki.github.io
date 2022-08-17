@@ -9,8 +9,6 @@ header:
 
 
 
-
-
 ## 1. Experience
 ### FYCOMPUTIG / IREVOLUTION <img src="../assets/images/irevolution-logo-dark.svg" alt="IRevolution logo"  align="right" width="200" height = "200"/> 
 

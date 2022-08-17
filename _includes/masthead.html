@@ -5,7 +5,17 @@
     <div class="masthead__menu">
       <nav id="site-nav" class="greedy-nav">
         {% unless logo_path == empty %}
-          <a class="site-logo" href="{{ '/' | relative_url }}"><img src="{{ logo_path | relative_url }}" alt="{{ site.masthead_title | default: site.title }}"></a>
+          <a class="site-logo" href="{{ '/' | relative_url }}"><img src="{{ logo_path | relative_url }}" alt="{{ site.masthead_title | default: site.title }}" id="logo_changer"></a>
+          <script>
+            node3=document.getElementById('logo_changer');
+            console.log(theme)
+            if(theme === "dark"){
+              node3.setAttribute('src', '/assets/images/screen2.png')
+            }
+            else{
+              node3.setAttribute('src', '/assets/images/screen1.png');
+            }
+          </script>
         {% endunless %}
         <a class="site-title" href="{{ '/' | relative_url }}">
           {{ site.masthead_title | default: site.title }}
@@ -19,7 +29,7 @@
           {%- endfor -%}
         </ul>
         {% if site.minimal_mistakes_skin2 %}
-          <i class="fas fa-fw fa-adjust" aria-hidden="true" onclick="node1=document.getElementById('theme_source');node2=document.getElementById('theme_source_2');if(node1.getAttribute('rel')=='stylesheet'){node1.setAttribute('rel', 'stylesheet alternate'); node2.setAttribute('rel', 'stylesheet');sessionStorage.setItem('theme', 'dark');}else{node2.setAttribute('rel', 'stylesheet alternate'); node1.setAttribute('rel', 'stylesheet');sessionStorage.setItem('theme', 'light');} return false;"></i>
+          <i class="fas fa-fw fa-adjust" aria-hidden="true" onclick="node1=document.getElementById('theme_source');node2=document.getElementById('theme_source_2');node3=document.getElementById('logo_changer');if(node1.getAttribute('rel')=='stylesheet'){node1.setAttribute('rel', 'stylesheet alternate'); node2.setAttribute('rel', 'stylesheet');sessionStorage.setItem('theme', 'dark');node3.setAttribute('src', '/assets/images/screen2.png')}else{node2.setAttribute('rel', 'stylesheet alternate'); node1.setAttribute('rel', 'stylesheet');node3.setAttribute('src', '/assets/images/screen1.png');sessionStorage.setItem('theme', 'light');} return false;"></i>
         {% endif %}
         {% if site.search == true %}
         <button class="search__toggle" type="button">

@@ -1,6 +1,8 @@
 ---
 title: About - Zakarya
 permalink: /about
+header:
+  image: ../assets/images/portfolio_cover.jpg
 ---
 ## Who Am I? and My Objectives
 
