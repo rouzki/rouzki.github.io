@@ -10,6 +10,32 @@ header:
 
 
 ## 1. Experience
+---
+### Bell <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Bell_logo.svg" alt="Bell logo" align="right" width="200" height="200"/>
+
+<br/>
+<br/>
+· Senior Data Scientist - Full-time<br/>
+· Mar 2024 - Present · 1 yr 1 mo<br/>
+· Remote<br/>
+{: .text-right}
+
+<br/>
+Leveraging machine learning algorithms to enhance customer-agent pairing and improve overall customer experience. In my role, I focused on optimizing the matching process to ensure that each caller is efficiently connected with the most suitable agent, resulting in increased sales, reduced deactivations, and higher customer satisfaction. The data-driven approach to customer service optimization significantly contributed to the company's revenue generating units (RGU's), while also elevating the level of customer engagement and loyalty.
+
+---
+### Bell <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Bell_logo.svg" alt="Bell logo" align="right" width="200" height="200"/>
+
+<br/>
+<br/>
+· Data Scientist - Full-time<br/>
+· Nov 2022 - Aug 2024 · 1 yr 10 mos<br/>
+· Remote<br/>
+{: .text-right}
+
+<br/>
+Bell is Canada's largest telecommunications company, providing Mobile phone, TV, high-speed and wireless Internet, and residential Home phone services.
+
 ### FYCOMPUTIG / IREVOLUTION <img src="../assets/images/irevolution-logo-dark.svg" alt="IRevolution logo"  align="right" width="200" height = "200"/> 
 
 <br/>
