@@ -4,15 +4,23 @@ permalink: /about
 header:
   image: ../assets/images/portfolio_cover.jpg
 ---
-## Who Am I? and My Objectives
 
-Ambitious data scientist with a passion for machine learning, natural language processing and deep learning. I am passionate about working with data, and always a keen learner about Machine Learning and new techniques. Looking for challenging data science projects, using my current skill set to create data-driven solutions and improving my skills towards artificial intelligence.
+## About Me
 
-Trying to become a data scientist who is not only willing to get hands dirty and dig into numbers, but also capable of driving successful business solutions with creative ideas.
+I am Zakarya, an ambitious data scientist with a deep passion for machine learning, natural language processing, and deep learning. My journey in data science is driven by a relentless curiosity and a desire to leverage data to create impactful solutions. I am always eager to learn and adopt new techniques in the ever-evolving field of machine learning.
 
-I love to read AI blogs, watch YouTube tutorials and listen to AI podcasts. I am learning so much from the AI community, where knowledge is shared to challenge the boundary of computer intelligence. In addition, as an NLP Practitioner, I love to read, publish and  discuss recent research papers in Deep Learning and open-source projects, and also love applying state-of-the-art technologies in NLP.
+### My Objectives
 
+My goal is to tackle challenging data science projects that push the boundaries of what is possible. I aim to use my skills to develop data-driven solutions that not only solve complex problems but also drive successful business outcomes. I believe in the power of creative thinking and innovative approaches to make a difference.
 
-Always love a good conversation, feel free to reach out to me about anything tech, fitness or coffee!
+### My Interests
+
+- **AI Community Engagement**: I actively engage with the AI community by reading blogs, watching tutorials, and listening to podcasts. This continuous learning helps me stay updated with the latest advancements and trends in AI.
+- **NLP Practitioner**: As an NLP enthusiast, I enjoy reading, publishing, and discussing recent research papers in deep learning and open-source projects. Applying state-of-the-art technologies in NLP is one of my core interests.
+- **Continuous Learning**: I am committed to lifelong learning and constantly seek opportunities to expand my knowledge and skills in artificial intelligence.
+
+### Let's Connect
+
+I am always open to a good conversation about technology, fitness, or coffee. Feel free to reach out to me!
 
 ~~ Zakarya
