@@ -6,27 +6,44 @@ classes: wide
 header:
   image: ../assets/images/resume_cover.jpg
 ---
+<style>
+  .vertical-line {
+    border-left: 2px solid #000;
+    height: 100%;
+    position: absolute;
+    left: 50%;
+    margin-left: -1px;
+    top: 0;
+  }
+  .experience-container {
+    position: relative;
+    padding-left: 20px;
+  }
+</style>
 
 ## 1. Experience
 ---
 
 ### Bell <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Bell_logo.svg" alt="Bell logo" align="right" width="120" height="120"/>
 
-**Senior Data Scientist - Full-time**  
-<span id="bell-senior-dates">Mar 2024 - Present</span>  
-*Remote*  
+<div class="experience-container">
+  <div class="vertical-line"></div>
+  
+  **Senior Data Scientist - Full-time**  
+  <span id="bell-senior-dates">Mar 2024 - Present</span>  
+  *Remote*  
 
-Leveraging machine learning algorithms to enhance customer-agent pairing and improve overall customer experience. In my role, I focused on optimizing the matching process to ensure that each caller is efficiently connected with the most suitable agent, resulting in increased sales, reduced deactivations, and higher customer satisfaction. The data-driven approach to customer service optimization significantly contributed to the company's revenue generating units (RGU's), while also elevating the level of customer engagement and loyalty.
+  - Leveraging machine learning algorithms to enhance customer-agent pairing and improve overall customer experience.
+  - Focused on optimizing the matching process to ensure that each caller is efficiently connected with the most suitable agent, resulting in increased sales, reduced deactivations, and higher customer satisfaction.
+  - The data-driven approach to customer service optimization significantly contributed to the company's revenue generating units (RGU's), while also elevating the level of customer engagement and loyalty.
 
----
+  **Data Scientist - Full-time**  
+  <span id="bell-data-dates">Nov 2022 - Aug 2024</span>  
+  *Remote*  
 
-### Bell <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Bell_logo.svg" alt="Bell logo" align="right" width="120" height="120"/>
+  - Bell is Canada's largest telecommunications company, providing Mobile phone, TV, high-speed and wireless Internet, and residential Home phone services.
+</div>
 
-**Data Scientist - Full-time**  
-<span id="bell-data-dates">Nov 2022 - Aug 2024</span>  
-*Remote*  
-
-Bell is Canada's largest telecommunications company, providing Mobile phone, TV, high-speed and wireless Internet, and residential Home phone services.
 
 ---
 
