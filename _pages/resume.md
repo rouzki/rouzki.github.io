@@ -11,7 +11,7 @@ header:
 
 ## 1. Experience
 ---
-### Bell <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Bell_logo.svg" alt="Bell logo" align="right" width="200" height="200"/>
+### Bell <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Bell_logo.svg" alt="Bell logo" align="right" width="120" height="120"/>
 
 <br/>
 <br/>
@@ -24,7 +24,7 @@ header:
 Leveraging machine learning algorithms to enhance customer-agent pairing and improve overall customer experience. In my role, I focused on optimizing the matching process to ensure that each caller is efficiently connected with the most suitable agent, resulting in increased sales, reduced deactivations, and higher customer satisfaction. The data-driven approach to customer service optimization significantly contributed to the company's revenue generating units (RGU's), while also elevating the level of customer engagement and loyalty.
 
 ---
-### Bell <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Bell_logo.svg" alt="Bell logo" align="right" width="200" height="200"/>
+### Bell <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Bell_logo.svg" alt="Bell logo" align="right" width="120" height="120"/>
 
 <br/>
 <br/>
